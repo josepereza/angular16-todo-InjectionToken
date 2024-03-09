@@ -79,13 +79,26 @@ function todosSignalFactory(route = inject(ActivatedRoute), http = inject(HttpCl
 
          todosSignal.update(v => [...v, newTodo]);
       },
+
       toggle: (id: string) => {
+         todosSignal.update(v =>
+            v.map(item => {
+               if (item.id === id) {
+                  item.completed = !item.completed;
+               }
+
+               return item;
+            })
+         );
+      },
+
+      /*  toggle: (id: string) => {
          todosSignal.mutate(v => {
             const todo = v.find(todo => todo.id === id);
 
             if (todo) todo.completed = !todo.completed;
          });
-      },
+      }, */
       delete: (id: string) => {
          todosSignal.update(v => v.filter(todo => todo.id !== id));
       },
