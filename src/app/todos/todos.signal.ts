@@ -90,11 +90,15 @@ function todosSignalFactory(route = inject(ActivatedRoute), http = inject(HttpCl
          todosSignal.update(v => v.filter(todo => todo.id !== id));
       },
       update: (id: string, text: string) => {
-         todosSignal.mutate(v => {
-            const todo = v.find(todo => todo.id === id);
+         todosSignal.update(v =>
+            v.map(item => {
+               if (item.id === id) {
+                  item.text = text;
+               }
 
-            if (todo) todo.text = text;
-         });
+               return item;
+            })
+         );
       },
       clearComplete: () => {
          todosSignal.update(v => v.filter(todo => !todo.completed));
